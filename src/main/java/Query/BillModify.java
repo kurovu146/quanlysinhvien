@@ -5,7 +5,6 @@
 package Query;
 
 import Object.Bill;
-import Object.Room;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -38,11 +37,60 @@ public class BillModify {
                         resultSet.getInt("id"),                        
                         resultSet.getInt("room_id"),
                         resultSet.getFloat("amount"),
-                        resultSet.getString("tittle"),
+                        resultSet.getString("title"),
                         resultSet.getDate("create_at")
                 );
                 billList.add(bill);
             }     
+        } catch (SQLException ex) {
+            System.out.println("Error" + ex.toString());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    System.out.println("Error" + ex.toString());
+                }
+            }
+        }
+        
+        return billList;
+    }
+    
+    public static List<Bill> getBillByRooom(String name, String type) {
+        List<Bill> billList = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement sttm = null;
+        ResultSet result = null;
+        try {
+            // Lấy danh sách sinh viên
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlysinhvien", "tuanvd14", "tuanvd14");
+            
+            String sql = "select id from room where name=? and type=?";
+            sttm = connection.prepareStatement(sql);              
+            sttm.setString(1, name);            
+            sttm.setString(2, type);
+            int room_id = 0;
+            result = sttm.executeQuery();
+            while (result.next()) {
+                room_id = result.getInt("id");
+            }
+            
+            PreparedStatement sttm1 = null;
+            String sql1 = "select * from bill where room_id=?";
+            sttm1 = connection.prepareStatement(sql1);              
+            sttm1.setInt(1, room_id);            
+            result = sttm1.executeQuery();
+            while (result.next()) {
+                Bill bill = new Bill(                        
+                        result.getInt("id"),                        
+                        result.getInt("room_id"),
+                        result.getFloat("amount"),
+                        result.getString("title"),
+                        result.getDate("create_at")
+                );
+                billList.add(bill);
+            }  
         } catch (SQLException ex) {
             System.out.println("Error" + ex.toString());
         } finally {
@@ -66,7 +114,7 @@ public class BillModify {
             // Lấy danh sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlysinhvien", "tuanvd14", "tuanvd14");
             
-            String sql = "insert into bill(room_id, amount, tittle, create_at) value(?, ?, ?, ?)";
+            String sql = "insert into bill(room_id, amount, title, create_at) value(?, ?, ?, ?)";
             statement = connection.prepareCall(sql);
               
             statement.setInt(1, bill.getRoom_id());

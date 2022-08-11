@@ -5,8 +5,10 @@
 package Query;
 
 import Object.Room;
+import static VARIABLE.GlobalVariable.ID;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -56,24 +58,40 @@ public class RoomModify {
         return roomList;
     }
     
-    public static void registerRoom() {
+    public static void registerRoom(String name, String type) {
         Connection connection = null;
-        PreparedStatement statement = null;
-     
+        PreparedStatement sttm = null;
+        ResultSet result = null;
         try {
             // Lấy danh sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlysinhvien", "tuanvd14", "tuanvd14");
             
-            String sql = "update room set current_count=? where name=? and type=?";
-            statement = connection.prepareCall(sql);
-              
-            statement.setString(1, std.getName());
-            statement.setString(2, std.getEmail());
-            statement.setString(3, std.getMssv());
-            statement.setDate(4, std.getDob());
-            statement.setInt(5, std.getId());
+            String sql = "select * from room where name=? and type=?";
+            sttm = connection.prepareStatement(sql);              
+            sttm.setString(1, name);           
+            sttm.setString(2, type);    
+            result = sttm.executeQuery();
             
-            statement.execute();
+            int room_id = 0, current_count = 0;
+            while (result.next()) {
+                room_id = Integer.parseInt(result.getString("id"));
+                current_count = Integer.parseInt(result.getString("current_count")) + 1;
+            }
+            PreparedStatement sttm1 = null;
+            String sql2 = "update room set current_count=? where id=?";
+            sttm1 = connection.prepareStatement(sql2);              
+            sttm1.setInt(1, room_id);           
+            sttm1.setInt(2, current_count);           
+            sttm1.execute();
+            
+            System.out.println(room_id);
+            System.out.println(ID);
+            PreparedStatement sttm2 = null;
+            String sql3 = "update user set room_id=? where id=?";
+            sttm2 = connection.prepareStatement(sql3);              
+            sttm2.setInt(1, room_id);           
+            sttm2.setInt(2, ID);
+            sttm2.execute();    
         } catch (SQLException ex) {
             System.out.println("Error" + ex.toString());
         } finally {

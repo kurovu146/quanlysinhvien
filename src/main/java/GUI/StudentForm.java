@@ -167,6 +167,7 @@ public class StudentForm extends javax.swing.JFrame {
         std.setEmail(email.getText());
         std.setMssv(mssv.getText());
         std.setId(ID);
+        std.setDob(dob.getText());
         updateStudent(std);
         JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
         MainForm main = new MainForm();

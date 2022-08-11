@@ -4,6 +4,9 @@
  */
 package GUI;
 
+import static Query.RoomModify.registerRoom;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DELL
@@ -116,7 +119,10 @@ public class RegisterForm extends javax.swing.JFrame {
 
     private void RegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterActionPerformed
         // TODO add your handling code here:
-        .
+        String name = txtName.getText();
+        String type = txtType.getText();
+        registerRoom(name, type);
+        JOptionPane.showMessageDialog(this, "Đăng kí phòng thành công!");
         MainForm main = new MainForm();
         main.setVisible(true);
         this.dispose();

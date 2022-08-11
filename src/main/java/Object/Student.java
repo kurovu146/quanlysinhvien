@@ -4,21 +4,18 @@
  */
 package Object;
 
-import java.sql.Date;
-
 /**
  *
  * @author DELL
  */
 public class Student {
     int id, room_id;
-    String name, username, password, email, mssv;
-    Date dob;
+    String name, username, password, email, mssv, dob;
 
     public Student() {
     }
 
-    public Student(int id, int room_id, String name, String username, String password, String email, String mssv, Date dob) {
+    public Student(int id, int room_id, String name, String username, String password, String email, String mssv, String dob) {
         this.id = id;
         this.room_id = room_id;
         this.name = name;
@@ -29,7 +26,7 @@ public class Student {
         this.dob = dob;
     }
 
-    public Student(int id, int room_id, String name, String email, String mssv, Date dob) {
+    public Student(int id, int room_id, String name, String email, String mssv, String dob) {
         this.id = id;
         this.room_id = room_id;
         this.name = name;
@@ -94,11 +91,11 @@ public class Student {
         this.email = email;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 }
